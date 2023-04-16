@@ -80,7 +80,7 @@ function Pathfind:startPath( position )
                 self.data.Waypoint_Index += 1
                 self.data.Current_Waypoint = self.data.Waypoints[self.data.Waypoint_Index]
 
-                self.callback(char);
+                self.callback(char, 'NewWaypoint');
                 if self.data.Current_Waypoint.Action == Enum.PathWaypointAction.Jump then
                     hum.Jump = true
                 end
