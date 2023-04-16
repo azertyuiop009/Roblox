@@ -88,7 +88,7 @@ function _G.Pathfind:startPath( position )
                 end
                 humanoid:MoveTo(self.data.Current_Waypoint.Position)
 
-            else
+            elseif self.data.Waypoint_Index == numwp then
 
                 self.callback(character, 'MoveToFinished');
 
