@@ -4,11 +4,11 @@ repeat wait() until game:IsLoaded()
 -- Define some basic properties
 local Players = game.Players;
 local Player = Players.LocalPlayer;
-local Pathfind = {};
+_G.Pathfind = {};
 local Pathfind_service = game:GetService("PathfindingService")
 
 -- Create constructor
-function Pathfind:new ( o )
+function _G.Pathfind:new ( o )
     o = o or {  }
     setmetatable(o, self)
     self.__index = self
@@ -16,7 +16,7 @@ function Pathfind:new ( o )
 end
 
 -- Create initiator with options
-function Pathfind:init(info, callback)
+function _G.Pathfind:init(info, callback)
 
     self.info = info or { ["AgentHeight"] = 5, ["AgentRadius"] = 3, ["AgentCanJump"] = true };
 
@@ -33,14 +33,14 @@ function Pathfind:init(info, callback)
 end
 
 -- Stop pathfinding
-function Pathfind:stopPath()
+function _G.Pathfind:stopPath()
 
     self.data.Task = 0;
 
 end
 
 -- Start pathfinding
-function Pathfind:startPath( position )
+function _G.Pathfind:startPath( position )
 
     local character = Player.Character;
     local humanoid = character.Humanoid;
