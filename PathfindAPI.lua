@@ -1,4 +1,5 @@
 -- Wait for the game load
+print('ez')
 repeat wait() until game:IsLoaded()
 
 -- Define some basic properties
