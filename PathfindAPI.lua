@@ -56,7 +56,7 @@ function _G.Pathfind:startPath( position )
 
     if self.Path.Status == Enum.PathStatus.Success then
 
-        self.data.Waypoints = path:GetWaypoints();
+        self.data.Waypoints = self.Path:GetWaypoints();
         self.data.Waypoint_Index = 2;
         self.data.Current_Waypoint = self.data.Waypoints[self.data.Waypoint_Index]
 
@@ -69,7 +69,7 @@ function _G.Pathfind:startPath( position )
 
     else
         -- Cancel Pathfind
-        self.callback(char, 'Unsucess');
+        self.callback(character, 'Unsucess');
         self.data.Task = 0
         return false
     end
@@ -78,19 +78,19 @@ function _G.Pathfind:startPath( position )
         if( currentTask ~= self.data.Task ) then return end;
         if(self.data.Waypoints ~= nil) then
             local numwp = #self.data.Waypoints
-            if char ~= nil and hum ~= nil and reached and self.data.Waypoint_Index < numwp then
+            if character ~= nil and humanoid ~= nil and reached and self.data.Waypoint_Index < numwp then
                 self.data.Waypoint_Index += 1
                 self.data.Current_Waypoint = self.data.Waypoints[self.data.Waypoint_Index]
 
-                self.callback(char, 'NewWaypoint');
+                self.callback(character, 'NewWaypoint');
                 if self.data.Current_Waypoint.Action == Enum.PathWaypointAction.Jump then
-                    hum.Jump = true
+                    humanoid.Jump = true
                 end
-                hum:MoveTo(self.data.Current_Waypoint.Position)
+                humanoid:MoveTo(self.data.Current_Waypoint.Position)
 
             else
 
-                self.callback(char, 'MoveToFinished');
+                self.callback(character, 'MoveToFinished');
 
             end
         end
@@ -100,7 +100,7 @@ function _G.Pathfind:startPath( position )
 
         if( currentTask ~= self.data.Task ) then return end;
 
-        self.callback(char, 'Blocked');
+        self.callback(character, 'Blocked');
 
         if blockedWaypointIndex > self.data.Waypoint_Index then
             self.startPath( position )
@@ -108,7 +108,7 @@ function _G.Pathfind:startPath( position )
 
     end
 
-    path.Blocked:Connect(blocked_waypoint)
-    hum.MoveToFinished:Connect(new_waypoint)
+    self.Path.Blocked:Connect(blocked_waypoint)
+    humanoid.MoveToFinished:Connect(new_waypoint)
 
 end
