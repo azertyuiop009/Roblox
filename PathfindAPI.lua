@@ -35,7 +35,7 @@ function _G.Pathfind:init( callback )
     local humanoid = character.Humanoid;
 
     local function new_waypoint(reached)
-        if( self.data.stopped ) then self.data.stopped = false return end;
+        if( self.data.Task == 0 ) then return end;
         if(self.data.Waypoints ~= nil) then
             local numwp = #self.data.Waypoints
             if character ~= nil and humanoid ~= nil and reached and self.data.Waypoint_Index < numwp then
@@ -58,7 +58,7 @@ function _G.Pathfind:init( callback )
 
     local function blocked_waypoint( blockedWaypointIndex )
 
-        if( self.data.stopped ) then self.data.stopped = false return end;
+        if( self.data.Task == 0 ) then return end;
 
         self.callback(character, 'Blocked');
 
@@ -83,7 +83,7 @@ end
 -- Start pathfinding
 function _G.Pathfind:startPath( position )
 
-    
+    self:stopPath();
     local character = Player.Character;
     local humanoid = character.Humanoid;
     local root = character.HumanoidRootPart;
@@ -93,7 +93,6 @@ function _G.Pathfind:startPath( position )
     end)
 
     local currentTask = tick();
-    if ( self.data.Task ~= 0) then self.data.stopped = true; end
     self.data.Task = currentTask;
 
     if self.Path.Status == Enum.PathStatus.Success then
