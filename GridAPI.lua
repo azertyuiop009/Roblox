@@ -1,3 +1,4 @@
+-- Wait for the game load
 repeat wait() until game:IsLoaded()
 print('GridAPI Loaded 🥳')
 
@@ -11,6 +12,7 @@ local gridFolder = workspace:FindFirstChild('rayCastGrid') or Instance.new('Fold
 gridFolder.Name = 'rayCastGrid';
 gridFolder.Parent = workspace;
 
+-- Manage constructor
 function grid:new( o )
 
     o = o or {  }
@@ -24,6 +26,7 @@ local function floor( o )
     return math.floor( math.sqrt(o) )
 end
 
+-- Add part to workspace
 function grid:addPart( i, x, y, z )
 
     local part = gridFolder:FindFirstChild('rayCastCylinder'..i) or Instance.new('Part');
@@ -45,6 +48,7 @@ function grid:addPart( i, x, y, z )
 
 end
 
+-- Create/update all parts of grid
 function grid:updateGrid()
 
     local offSet = ( floor( self.number ) / 2 * self.radius ) + self.radius/2;
@@ -101,6 +105,7 @@ function grid:updateGrid()
 
 end
 
+-- start grid
 function grid:init( number, radius )
 
     self.number = number;
