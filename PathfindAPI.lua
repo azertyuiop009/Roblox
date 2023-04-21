@@ -25,10 +25,51 @@ function _G.Pathfind:init( callback )
         Task = 0,
         Waypoint_Index = 0,
         Waypoints = {},
-        Current_Waypoint = nil
+        Current_Waypoint = nil,
+        stopped = false
     }
 
     self.Path = Pathfind_service:CreatePath(_G.PInfo);
+
+    local character = Player.Character;
+    local humanoid = character.Humanoid;
+
+    local function new_waypoint(reached)
+        if( self.data.stopped ) then self.data.stopped = false return end;
+        if(self.data.Waypoints ~= nil) then
+            local numwp = #self.data.Waypoints
+            if character ~= nil and humanoid ~= nil and reached and self.data.Waypoint_Index < numwp then
+                self.data.Waypoint_Index += 1
+                self.data.Current_Waypoint = self.data.Waypoints[self.data.Waypoint_Index]
+
+                self.callback(character, 'NewWaypoint');
+                if self.data.Current_Waypoint.Action == Enum.PathWaypointAction.Jump then
+                    humanoid.Jump = true
+                end
+                humanoid:MoveTo(self.data.Current_Waypoint.Position)
+
+            elseif self.data.Waypoint_Index == numwp then
+
+                self.callback(character, 'MoveToFinished');
+
+            end
+        end
+    end
+
+    local function blocked_waypoint( blockedWaypointIndex )
+
+        if( self.data.stopped ) then self.data.stopped = false return end;
+
+        self.callback(character, 'Blocked');
+
+        if blockedWaypointIndex > self.data.Waypoint_Index then
+            self.startPath( position )
+        end
+
+    end
+
+    self.Path.Blocked:Connect(blocked_waypoint);
+    humanoid.MoveToFinished:Connect(new_waypoint);
 
 end
 
@@ -52,6 +93,7 @@ function _G.Pathfind:startPath( position )
     end)
 
     local currentTask = tick();
+    if ( self.data.Task ~= 0) then self.data.stopped = true; end
     self.data.Task = currentTask;
 
     if self.Path.Status == Enum.PathStatus.Success then
@@ -74,41 +116,5 @@ function _G.Pathfind:startPath( position )
         return false
     end
 
-    local function new_waypoint(reached)
-        if( currentTask ~= self.data.Task ) then return end;
-        if(self.data.Waypoints ~= nil) then
-            local numwp = #self.data.Waypoints
-            if character ~= nil and humanoid ~= nil and reached and self.data.Waypoint_Index < numwp then
-                self.data.Waypoint_Index += 1
-                self.data.Current_Waypoint = self.data.Waypoints[self.data.Waypoint_Index]
-
-                self.callback(character, 'NewWaypoint');
-                if self.data.Current_Waypoint.Action == Enum.PathWaypointAction.Jump then
-                    humanoid.Jump = true
-                end
-                humanoid:MoveTo(self.data.Current_Waypoint.Position)
-
-            elseif self.data.Waypoint_Index == numwp then
-
-                self.callback(character, 'MoveToFinished');
-
-            end
-        end
-    end
-
-    local function blocked_waypoint( blockedWaypointIndex )
-
-        if( currentTask ~= self.data.Task ) then return end;
-
-        self.callback(character, 'Blocked');
-
-        if blockedWaypointIndex > self.data.Waypoint_Index then
-            self.startPath( position )
-        end
-
-    end
-
-    self.Path.Blocked:Connect(blocked_waypoint)
-    humanoid.MoveToFinished:Connect(new_waypoint)
 
 end
