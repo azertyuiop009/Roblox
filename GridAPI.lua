@@ -33,6 +33,11 @@ function grid:addPart( i, x, y, z )
     part.Name = 'rayCastCylinder'..i
     part.CanCollide = false;
 
+    local Blocked = part:FindFirstChild('Blocked') or Instance.new('BoolValue')
+    Blocked.Name == 'Blocked'
+    Blocked.Value = false;
+    Blocked.Parent = part;
+
     part.Material = Enum.Material['SmoothPlastic'];
 
     part.Size = Vector3.new( 50, self.radius, self.radius )
