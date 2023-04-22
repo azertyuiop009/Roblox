@@ -34,7 +34,7 @@ function grid:addPart( i, x, y, z )
     part.CanCollide = false;
 
     local Blocked = part:FindFirstChild('Blocked') or Instance.new('BoolValue')
-    Blocked.Name == 'Blocked'
+    Blocked.Name = 'Blocked'
     Blocked.Value = false;
     Blocked.Parent = part;
 
