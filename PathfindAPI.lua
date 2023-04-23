@@ -77,6 +77,7 @@ end
 function _G.Pathfind:stopPath()
 
     self.data.Task = 0;
+    self.callback(Player.Character, 'Stopped')
 
 end
 
