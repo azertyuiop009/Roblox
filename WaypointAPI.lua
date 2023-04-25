@@ -22,7 +22,7 @@ function _G.Pathfind:init( waypoints, callback )
 
     self.waypoints = waypoints;
     self.callback = callback;
-    self.index = 0;
+    self.index = 1;
 
     Player.CharacterAdded:Connect(function(character)
         character.humanoid.MoveToFinished:Connect(function()
@@ -35,7 +35,7 @@ end
 function _G.Pathfind:nextWayPoint( index )
 
     local index_ = index or self.index;
-    if ( not index ) then self.index = math.min(math.max(index_ + 1, 0), #self.waypoints-1) end;
+    if ( not index ) then self.index = math.min(math.max(index_ + 1, 1), #self.waypoints-1) end;
 
     local waypoint = self.waypoints[index_];
     local waypoint_position;
@@ -48,7 +48,7 @@ function _G.Pathfind:nextWayPoint( index )
 
     if ( not waypoint_position ) then return self.callback("error: waypoint position incorrect") end
 
-    local character = Player:WaitForChild('Character');
+    local character = Player.Character;
     local humanoid = character.Humanoid;
 
     humanoid:MoveTo( waypoint_position );
