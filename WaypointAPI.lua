@@ -24,12 +24,19 @@ function _G.Pathfind:init( waypoints, callback )
     self.callback = callback;
     self.index = 1;
 
+
+    self:characterAdded(Player.Character or Player.CharacterAdded:Wait())
+
     Player.CharacterAdded:Connect(function(character)
-        character.Humanoid.MoveToFinished:Connect(function()
-            self.callback('success');
-        end)
+        self:characterAdded(character)
     end)
 
+end
+
+function _G.Pathfind:characterAdded(char)
+    char.Humanoid.MoveToFinished:Connect(function()
+        self.callback('success');
+    end)
 end
 
 
