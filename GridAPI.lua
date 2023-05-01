@@ -32,7 +32,7 @@ function grid:addPart( i, x, y, z )
     part.Anchored = true;
     part.Name = 'rayCastCylinder'..i
     part.CanCollide = false;
-    part.collisionGroup = 'Dodge';
+    part.CollisionGroup = 'Dodge';
 
     local Blocked = part:FindFirstChild('Blocked') or Instance.new('BoolValue')
     Blocked.Name = 'Blocked'
